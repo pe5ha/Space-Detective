@@ -1,10 +1,15 @@
+import { Field } from "./field.js";
 
+import { DRAW } from "./draw.js";
+
+let canv = document.getElementById('canvas');
+let mainctx = canv.getContext('2d');
 initGame();
 alert("SPACE DETECTIVE HELLOOOOO");    
 mainLoop();
 function mainLoop(){
 
-	allMove();
+	allMove();//
 	allAction();
 	allDraw();
 	requestAnimationFrame(mainLoop);
@@ -25,22 +30,5 @@ function allAction(){
 
 }
 function allDraw(){
-	DRAW.
-}
-
-class Field{
-	static field : Cell[][];
-	static initField(){
-		for(let i=0;i<5;i++){
-			for(let j=0;j<5;j++){
-				this.field[i][j] = new Cell();
-			}
-		}
-  }
-	static getField():Cell[][]{
-		return this.field;
-	}
-}
-class Cell{
-  	cell : number = 0;
+	DRAW.drawField(mainctx);
 }
