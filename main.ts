@@ -1,12 +1,31 @@
-alert("SPACE DETECTIVE HELLOOOOO");    
 
 initGame();
+alert("SPACE DETECTIVE HELLOOOOO");    
+mainLoop();
+function mainLoop(){
+
+	allMove();
+	allAction();
+	allDraw();
+	requestAnimationFrame(mainLoop);
+}
+
 
 
 
 
 function initGame(){
   	Field.initField();
+}
+
+function allMove(){
+
+}
+function allAction(){
+
+}
+function allDraw(){
+	DRAW.
 }
 
 class Field{
