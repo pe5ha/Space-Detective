@@ -6,7 +6,7 @@ initGame();
 alert("SPACE DETECTIVE HELLOOOOO");
 mainLoop();
 function mainLoop() {
-    allMove(); //
+    allMove(); //комментарий для теста на гитхабе
     allAction();
     allDraw();
     requestAnimationFrame(mainLoop);
