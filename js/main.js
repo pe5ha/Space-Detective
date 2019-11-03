@@ -23,6 +23,8 @@ function allMove() {
 function allAction() {
 }
 function allDraw() {
+    // console.log('af');
     DRAW.drawField(mainctx);
 }
+export { mainField };
 //# sourceMappingURL=main.js.map

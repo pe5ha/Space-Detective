@@ -1,12 +1,13 @@
+import { Face } from "./draw.js";
 
 class Field{
     private field:Square[][] = [];
     private objList = [];
-    constructor (H:number=5,W:number=5){
+    constructor (public h:number=5,public w:number=5){
         console.log("initFiel");
-		for(let i=0;i<H;i++){
+		for(let i=0;i<h;i++){
             this.field[i] = [];
-			for(let j=0;j<W;j++){
+			for(let j=0;j<w;j++){
                 this.field[i][j] = new Square();
                 console.log(this.field[i][j]);
             }
@@ -23,7 +24,7 @@ class Field{
 }
 
 class Square {
-    private objList:FieldObj[] = [];
+    public objList:FieldObj[] = [];
     addPerson(person:Person){
         this.objList[this.objList.length]=person;
     }
@@ -31,11 +32,9 @@ class Square {
 
 class FieldObj{
     color:string;
-    fx:number; fy:number;
-    constructor(x:number,y:number){
+    face:Face = new Face(this);
+    constructor(public fx:number,public fy:number){
         this.color=getRndClr();
-        this.fx=x;
-        this.fy=y;
     }
 }
 
@@ -59,4 +58,4 @@ function getRndClr() {
     while(clr.length<6)clr="0"+clr;
     return "#"+clr;
 }
-export{Field,Person}
+export{Field,Person,FieldObj, Square}

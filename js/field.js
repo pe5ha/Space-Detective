@@ -1,11 +1,14 @@
+import { Face } from "./draw.js";
 class Field {
-    constructor(H = 5, W = 5) {
+    constructor(h = 5, w = 5) {
+        this.h = h;
+        this.w = w;
         this.field = [];
         this.objList = [];
         console.log("initFiel");
-        for (let i = 0; i < H; i++) {
+        for (let i = 0; i < h; i++) {
             this.field[i] = [];
-            for (let j = 0; j < W; j++) {
+            for (let j = 0; j < w; j++) {
                 this.field[i][j] = new Square();
                 console.log(this.field[i][j]);
             }
@@ -28,10 +31,11 @@ class Square {
     }
 }
 class FieldObj {
-    constructor(x, y) {
+    constructor(fx, fy) {
+        this.fx = fx;
+        this.fy = fy;
+        this.face = new Face(this);
         this.color = getRndClr();
-        this.fx = x;
-        this.fy = y;
     }
 }
 class Person extends FieldObj {
@@ -53,5 +57,5 @@ function getRndClr() {
         clr = "0" + clr;
     return "#" + clr;
 }
-export { Field, Person };
+export { Field, Person, FieldObj, Square };
 //# sourceMappingURL=field.js.map

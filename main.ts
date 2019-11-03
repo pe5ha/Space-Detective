@@ -1,4 +1,4 @@
-import { Field,Person } from "./field.js";
+import { Field, Person } from "./field.js";
 import { DRAW } from "./draw.js";
 
 let canv = document.getElementById('canvas');
@@ -35,5 +35,8 @@ function allAction(){
 
 }
 function allDraw(){
+	// console.log('af');
 	DRAW.drawField(mainctx);
 }
+
+export {mainField};
