@@ -9,4 +9,11 @@ class DRAW{
 
 }
 
+class Face{
+    drawMe(ctx:CanvasRenderingContext2D){
+        console.log('fasdf');
+        
+    }
+}
+
 export{DRAW}
