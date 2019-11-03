@@ -11,7 +11,10 @@ class DRAW{
 
 class Face{
     drawMe(ctx:CanvasRenderingContext2D){
-        console.log('fasdf');
+        // console.log('fasdf');
+
+        console.log('new shit');
+        
         
     }
 }
