@@ -6,7 +6,7 @@ class DRAW {
             for (let j = 0; j < fld.w; j++) {
                 ctx.fillStyle = "#aaccbb";
                 ctx.fillRect(i * 20, j * 20, 18, 18);
-                let sq = fld.getField(i, j);
+                let sq = fld.getField(j, i);
                 for (let obj of sq.objList)
                     obj.face.drawMe(ctx, i * 20 + 10, j * 20 + 10, 18);
             }
