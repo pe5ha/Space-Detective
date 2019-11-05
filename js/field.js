@@ -9,25 +9,59 @@ class Field {
         for (let i = 0; i < h; i++) {
             this.field[i] = [];
             for (let j = 0; j < w; j++) {
-                this.field[i][j] = new Square();
-                console.log(this.field[i][j]);
+                this.field[i][j] = new Cell();
+                //console.log(this.field[i][j]);
             }
         }
     }
-    addPerson(person, x, y) {
-        this.objList[this.objList.length] = person;
-        this.field[y][x].addPerson(person);
+    move(key, obj) {
+        // console.log("in move");
+        switch (key) {
+            case 37: // если нажата клавиша влево
+                if (obj.fx > 0)
+                    this.updateObjList(obj, obj.fy, obj.fx - 1);
+                break;
+            case 38: // если нажата клавиша вверх
+                if (obj.fy > 0)
+                    this.updateObjList(obj, obj.fy - 1, obj.fx);
+                break;
+            case 39: // если нажата клавиша вправо
+                if (obj.fx < this.w - 1)
+                    this.updateObjList(obj, obj.fy, obj.fx + 1);
+                break;
+            case 40: // если нажата клавиша вниз
+                if (obj.fy < this.h - 1)
+                    this.updateObjList(obj, obj.fy + 1, obj.fx);
+                break;
+        }
     }
-    getField(x, y) {
+    updateObjList(obj, fy, fx) {
+        let ind = this.field[obj.fy][obj.fx].objList.indexOf(obj); // поиск индекса первого элемента obj в текущем objList Cell
+        console.log(ind);
+        if (ind > -1)
+            this.field[obj.fy][obj.fx].objList.splice(ind, 1);
+        obj.fy = fy;
+        obj.fx = fx;
+        this.field[obj.fy][obj.fx].objList.push(obj);
+        console.log(this.field);
+    }
+    addPerson(obj) {
+        this.objList.push(obj);
+        this.field[obj.fy][obj.fx].addPerson(obj); // вызов <Cell>.addPerson
+    }
+    getField(y, x) {
         return this.field[y][x];
     }
+    getFieldAll() {
+        return this.field;
+    }
 }
-class Square {
+class Cell {
     constructor() {
         this.objList = [];
     }
-    addPerson(person) {
-        this.objList[this.objList.length] = person;
+    addPerson(obj) {
+        this.objList.push(obj);
     }
 }
 class FieldObj {
@@ -39,10 +73,10 @@ class FieldObj {
     }
 }
 class Person extends FieldObj {
-    constructor(name, field, x, y) {
-        super(x, y);
+    constructor(name, field, fy, fx) {
+        super(fx, fy);
         this.name = name;
-        field.addPerson(this, x, y);
+        field.addPerson(this);
     }
 }
 class Objects {
@@ -57,5 +91,5 @@ function getRndClr() {
         clr = "0" + clr;
     return "#" + clr;
 }
-export { Field, Person, FieldObj, Square };
+export { Field, Person, FieldObj, Cell };
 //# sourceMappingURL=field.js.map

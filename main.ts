@@ -25,14 +25,21 @@ function mainLoop(){
 function initGame(){
 	mainField = new Field();
 	Player = new Person("Player1",mainField,1,2);
-	console.log(mainField.getField(1,2));
+	console.log(mainField.getFieldAll());
+
+	function keyPress(e:any) {
+		if (37 <= e.keyCode && e.keyCode <= 40) mainField.move(e.keyCode,Player);
+	}
+	addEventListener("keydown", keyPress);		// слушатель клавиатуры
 }
 
 function allMove(){
 
 }
 function allAction(){
-
+	
+	//console.log('af');
+	
 }
 function allDraw(){
 	// console.log('af');

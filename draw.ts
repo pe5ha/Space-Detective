@@ -1,4 +1,4 @@
-import { Field, FieldObj, Square } from "./field.js";
+import { Field, FieldObj, Cell } from "./field.js";
 import { mainField } from "./main.js";
 
 class DRAW{
@@ -9,7 +9,7 @@ class DRAW{
             for(let j = 0; j<fld.w;j++){
                 ctx.fillStyle="#aaccbb";
                 ctx.fillRect(i*20,j*20,18,18);
-                let sq:Square = fld.getField(i,j);
+                let sq:Cell = fld.getField(j,i);
                 for(let obj of sq.objList)
                     obj.face.drawMe(ctx,i*20+10,j*20+10,18);
             }
