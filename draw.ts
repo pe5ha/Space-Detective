@@ -3,7 +3,8 @@ import { mainField } from "./main.js";
 
 class DRAW{
 
-    static drawField(ctx:CanvasRenderingContext2D){
+    static drawField(ctx:CanvasRenderingContext2D,x:number,y:number,w:number,h:number){
+        ctx.clearRect(x,y,w,h);
         let fld = mainField;
         for(let i = 0; i<fld.w;i++)
             for(let j = 0; j<fld.w;j++){
@@ -21,6 +22,7 @@ class Face{
     constructor(public obj:FieldObj){}
     drawMe(ctx:CanvasRenderingContext2D,x:number,y:number,s:number){
         ctx.fillStyle = this.obj.color;
+        ctx.beginPath();
         ctx.arc(x,y,s*.45,0,6.29);
         ctx.fill();
     }

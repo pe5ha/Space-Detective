@@ -30,7 +30,7 @@ function allAction() {
 }
 function allDraw() {
     // console.log('af');
-    DRAW.drawField(mainctx);
+    DRAW.drawField(mainctx, 0, 0, canv.width, canv.height);
 }
 export { mainField };
 //# sourceMappingURL=main.js.map

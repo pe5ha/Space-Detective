@@ -1,7 +1,7 @@
 import { Field, Person } from "./field.js";
 import { DRAW } from "./draw.js";
 
-let canv = document.getElementById('canvas');
+let canv:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('canvas');
 let mainctx = canv.getContext('2d');
 let mainField : Field;
 let Player : Person;
@@ -43,7 +43,7 @@ function allAction(){
 }
 function allDraw(){
 	// console.log('af');
-	DRAW.drawField(mainctx);
+	DRAW.drawField(mainctx,0,0,canv.width,canv.height);
 }
 
 export {mainField};

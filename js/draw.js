@@ -1,6 +1,7 @@
 import { mainField } from "./main.js";
 class DRAW {
-    static drawField(ctx) {
+    static drawField(ctx, x, y, w, h) {
+        ctx.clearRect(x, y, w, h);
         let fld = mainField;
         for (let i = 0; i < fld.w; i++)
             for (let j = 0; j < fld.w; j++) {
@@ -18,6 +19,7 @@ class Face {
     }
     drawMe(ctx, x, y, s) {
         ctx.fillStyle = this.obj.color;
+        ctx.beginPath();
         ctx.arc(x, y, s * .45, 0, 6.29);
         ctx.fill();
     }
