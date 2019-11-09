@@ -50,6 +50,8 @@ class Field {
         this.field[obj.fy][obj.fx].addPerson(obj); // вызов <Cell>.addPerson
     }
     getField(y, x) {
+        if (y < 0 || x < 0 || y >= this.h || x >= this.w)
+            return null;
         return this.field[y][x];
     }
     getFieldAll() {
@@ -84,7 +86,7 @@ class Objects {
         this.solid = solid;
     }
 }
-function getRndClr() {
+export function getRndClr() {
     let n = ~~(Math.random() * 0xffffff);
     let clr = n.toString(16);
     while (clr.length < 6)
