@@ -8,7 +8,6 @@ class DRAW {
         this.offx = w / 2 - this.cellS * (this.fvw + .5);
         this.offy = h / 2 - this.cellS * (this.fvh + .5);
         console.log(this.fvh);
-        this.addTextBox(1, 1, "hasf hasf haaaasf");
         // this.cellS=Math.min(40,~~(this.w/mainField.w),~~(this.h/mainField.h));
         let all = " aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ1234567890";
         for (let i = 0; i < all.length; i++) {
@@ -17,7 +16,7 @@ class DRAW {
             this.lettcanv[le].width = 15;
             this.lettcanv[le].height = 15;
             let ctx = this.lettcanv[le].getContext('2d');
-            ctx.font = "15px Arial";
+            ctx.font = this.lettS + "px Arial";
             ctx.fillText(le, 0, 15);
             // ctx.fillRect(0,0,10,10);
         }
@@ -47,14 +46,53 @@ class DRAW {
         for (let tb of this.textBoxes)
             tb.drawMe(ctx);
     }
-    static addTextBox(fx, fy, text) {
-        let bo = new TextBox(text, fx, fy);
+    static addTextBox(text, fx, fy, fw, fh) {
+        let bo = new TextBox(text, fx, fy, fw, fh);
         this.textBoxes.push(bo);
         return bo;
     }
     static remTextBox(tb) {
         let ind = this.textBoxes.indexOf(tb);
         this.textBoxes.splice(ind, 1);
+    }
+    static createDialogWin(text, sx, sy) {
+        let dens = Math.pow((this.cellS / this.lettS), 2), cellN = Math.ceil(text.length / dens);
+        console.log(dens + ' ' + cellN);
+        let bw = 1, bh = 1, x1 = sx, x2 = sx, y1 = sy, y2 = sy, fl = false;
+        while (bw * bh < cellN) {
+            fl = true;
+            for (let i = 0; i < bh; i++)
+                fl = fl && free(x1 - 1, y1 + i);
+            if (fl) {
+                x1 -= 1;
+                bw++;
+            }
+            fl = true;
+            for (let i = 0; i < bh; i++)
+                fl = fl && free(x2 + 1, y1 + i);
+            if (fl) {
+                x2 += 1;
+                bw++;
+            }
+            if (bw * bh >= cellN)
+                break;
+            fl = true;
+            for (let i = 0; i < bw; i++)
+                fl = fl && free(x1 + i, y1 - 1);
+            if (fl) {
+                y1 -= 1;
+                bh++;
+            }
+        }
+        return this.addTextBox(text, x1, y1, bw, bh);
+        function free(x, y) {
+            if (x == player.fx && y == player.fy)
+                return false;
+            for (let tb of DRAW.textBoxes)
+                if ((tb.fx <= x && (tb.fx + tb.fw - 1) >= x) && (tb.fy <= y && (tb.fy + tb.fh - 1) >= y))
+                    return false;
+            return true;
+        }
     }
 }
 DRAW.cellS = 40;
@@ -64,6 +102,7 @@ DRAW.fvw = 10;
 DRAW.fvh = 10;
 DRAW.offx = 0;
 DRAW.offy = 0;
+DRAW.lettS = 20;
 DRAW.lettcanv = [];
 DRAW.textBoxes = [];
 class TextBox {
@@ -73,33 +112,43 @@ class TextBox {
         this.fy = fy;
         this.fw = fw;
         this.fh = fh;
-        this.progress = 0;
-        this.tx = 10;
-        this.ty = 10;
-        this.lettS = 20;
+        this.progress = 0; //num of letters drawn
+        this.tx = 0;
+        this.ty = 0;
         this.canv = document.createElement("canvas");
         this.ctx = this.canv.getContext('2d');
         this.timer = 0;
         this.canv.width = fw * DRAW.cellS;
         this.canv.height = fh * DRAW.cellS;
     }
+    init() {
+        this.progress = 0;
+        this.tx = 0;
+        this.ty = 0;
+    }
     drawMe(ctx) {
         ctx.fillStyle = "#aa66bb";
         ctx.fillRect((this.fx) * DRAW.cellS, (this.fy) * DRAW.cellS, this.fw * DRAW.cellS, this.fh * DRAW.cellS);
-        if (this.progress < this.txt.length && this.timer == 9)
-            this.updCtx();
-        this.timer = (this.timer + 1) % 10;
+        if (this.progress < this.txt.length && this.timer == 0)
+            this.drawLett();
+        this.timer = (this.timer - 1);
         ctx.drawImage(this.canv, (this.fx) * DRAW.cellS, (this.fy) * DRAW.cellS);
     }
-    updCtx() {
+    drawLett() {
         // console.log('upd');
         this.ctx.drawImage(DRAW.lettcanv[this.txt.charAt(this.progress)], this.tx, this.ty);
-        this.tx += this.lettS;
-        if (this.tx + this.lettS > this.canv.width) {
-            this.tx = 10;
-            this.ty += this.lettS;
+        this.tx += DRAW.lettS;
+        if (this.tx + DRAW.lettS > this.canv.width) {
+            this.tx = 0;
+            this.ty += DRAW.lettS;
         }
         this.progress++;
+        this.timer = 3;
+    }
+    fillLett(n) {
+        this.init();
+        for (let i = 0; i < n; i++)
+            this.drawLett();
     }
 }
 class Face {

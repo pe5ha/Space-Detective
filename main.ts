@@ -22,15 +22,21 @@ function mainLoop(){
 
 
 
-
+let tb,tb2;
 function initGame(){
-	DRAW.init(canv.width,canv.height);
 	mainField = new Field(24,10);
 	player = new Person("Player1",mainField,0,0);
+	DRAW.init(canv.width,canv.height);
 	console.log(mainField.getFieldAll());
 
 	function keyPress(e:any) {
 		if (37 <= e.keyCode && e.keyCode <= 40) mainField.move(e.keyCode,player);
+		if(e.key==' '){
+			DRAW.remTextBox(tb);
+			DRAW.remTextBox(tb2);
+			tb = DRAW.createDialogWin("hasf hasf haaaasf",3,4);
+			tb2 = DRAW.createDialogWin("hasf hasf afgadfra g gtg aerg ahaaaasf",5,5);
+		}
 	}
 	addEventListener("keydown", keyPress);		// слушатель клавиатуры
 }
