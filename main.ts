@@ -1,5 +1,6 @@
 import { Field, Person, getRndClr } from "./field.js";
 import { DRAW } from "./draw.js";
+import { names } from "./brain.js";
 
 let canv:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('canvas');
 let mainctx = canv.getContext('2d');
@@ -25,10 +26,9 @@ function mainLoop(){
 let tb,tb2;
 function initGame(){
 	mainField = new Field(24,10);
-	player = new Person("Player1",mainField,0,0);
-	new Person("Bob", mainField, 2,2);
-	new Person("Bobson", mainField, 3,4);
-	new Person("Bob2", mainField, 4,4);
+	player = new Person("Player",mainField,0,0);
+	new Person(names[0], mainField, 2,2);
+	new Person(names[1], mainField, 3,4);
 	DRAW.init(canv.width,canv.height);
 	console.log(mainField.getFieldAll());
 
