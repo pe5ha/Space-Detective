@@ -9,26 +9,37 @@ class Brain {
     constructor(perss) {
         this.pers = perss;
         this.nameOfNpc = perss.name;
-        this.pers.attributes.eyes = 3;
-        // this.mydial = allDialogs[name];
+        this.pers.attributes.eyes;
+        this.pers.attributes.smell;
+        //this.mydial = allDialogs[name];
     }
     getDialogline(NumOfPlayerResp = "") {
         //сюда будет приходить номер ответа нпс в диалоге
         //getting text 
         //yet dont know how 
         //here we use NameOfNpc and NumOfResp
-        
         return "hELLO I m " + this.nameOfNpc;
         //возращаю ответ персонажа
     }
 }
-// let allDialogs = {
-//     "bob1":{
-//         {cond:()=>{return mainField.h==20}; repl:"Field h is 20"},
-//         {cond:()=>{return mainField.h==21}; repl:"Field h is 21"},
-//         {cond:()=>{return true}; repl:"Field h is hh"}
-//     },
-//     "bob2":{}
-// }
-export { Brain };
+let Bobby1;
+Bobby1.pers.attributes.eyes = 6;
+Bobby1.nameOfNpc = "Bobby1";
+let Bobby2;
+Bobby2.pers.attributes.smell = "good";
+Bobby2.nameOfNpc = "Bobby2";
+let allDialogs = {
+    bob1: [
+        { cond: () => { return Bobby1.pers.attributes.eyes == 6; }, repl: "I can see you 6th times" },
+        { cond: () => { return Bobby1.pers.attributes.eyes != 6; }, repl: "Raise my eyes!" },
+    ],
+    bob2: [
+        { cond: () => { return Bobby2.pers.attributes.smell !== "fu"; }, repl: "sory, didnt brush my teeth" },
+        { cond: () => { return Bobby2.pers.attributes.smell == "good"; }, repl: "Ye. I use Axe - strong power!" },
+    ],
+    bob3: [],
+    bob4: [],
+    bob5: []
+};
+export { Brain, allDialogs };
 //# sourceMappingURL=brain.js.map
