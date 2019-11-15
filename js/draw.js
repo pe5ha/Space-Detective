@@ -9,7 +9,7 @@ class DRAW {
         this.offy = h / 2 - this.cellS * (this.fvh + .5);
         console.log(this.fvh);
         // this.cellS=Math.min(40,~~(this.w/mainField.w),~~(this.h/mainField.h));
-        let all = " aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ1234567890";
+        let all = " aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ1234567890,.!?";
         for (let i = 0; i < all.length; i++) {
             let le = all.charAt(i);
             this.lettcanv[le] = document.createElement("canvas");
@@ -54,6 +54,9 @@ class DRAW {
     static remTextBox(tb) {
         let ind = this.textBoxes.indexOf(tb);
         this.textBoxes.splice(ind, 1);
+    }
+    static remAllTextBoxes() {
+        this.textBoxes = [];
     }
     static createDialogWin(text, sx, sy) {
         let dens = Math.pow((this.cellS / this.lettS), 2), cellN = Math.ceil(text.length / dens);
@@ -170,5 +173,5 @@ class WallFace extends Face {
         ctx.fill();
     }
 }
-export { DRAW, Face };
+export { DRAW, Face, TextBox };
 //# sourceMappingURL=draw.js.map

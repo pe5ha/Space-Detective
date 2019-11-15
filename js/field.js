@@ -1,4 +1,4 @@
-import { Face } from "./draw.js";
+import { Face, DRAW } from "./draw.js";
 class Field {
     constructor(h = 5, w = 5) {
         this.h = h;
@@ -16,6 +16,7 @@ class Field {
     }
     move(key, obj) {
         // console.log("in move");
+        DRAW.remAllTextBoxes();
         switch (key) {
             case 37: // если нажата клавиша влево
                 if (obj.fx > 0)
@@ -36,6 +37,14 @@ class Field {
         }
     }
     updateObjList(obj, fy, fx) {
+        let free = true;
+        for (let oo of this.field[fy][fx].objList) {
+            if (oo.solid)
+                free = false;
+            oo.action();
+        }
+        if (!free)
+            return;
         let ind = this.field[obj.fy][obj.fx].objList.indexOf(obj); // поиск индекса первого элемента obj в текущем objList Cell
         console.log(ind);
         if (ind > -1)
@@ -71,14 +80,28 @@ class FieldObj {
         this.fx = fx;
         this.fy = fy;
         this.face = new Face(this);
+        this.solid = true;
         this.color = getRndClr();
+    }
+    action() {
+        console.log('action');
     }
 }
 class Person extends FieldObj {
     constructor(name, field, fy, fx) {
         super(fx, fy);
+        this.brain = { act: () => {
+                if (this.txtbox) {
+                    DRAW.remTextBox(this.txtbox);
+                    this.txtbox = null;
+                }
+                DRAW.createDialogWin("Hi, my name is " + this.name, this.fx, this.fy - 1);
+            } };
         this.name = name;
         field.addPerson(this);
+    }
+    action() {
+        this.brain.act();
     }
 }
 class Objects {

@@ -1,4 +1,4 @@
-import { Face } from "./draw.js";
+import { Face, DRAW, TextBox } from "./draw.js";
 
 class Field{
     private field:Cell[][] = [];
@@ -16,7 +16,7 @@ class Field{
     }
     move(key:number,obj:FieldObj){
         // console.log("in move");
-
+        DRAW.remAllTextBoxes();
         switch(key){
             case 37:  // если нажата клавиша влево
                 if(obj.fx>0) this.updateObjList(obj,obj.fy,obj.fx-1);
@@ -33,12 +33,19 @@ class Field{
         }
     }
     updateObjList(obj:FieldObj,fy:number,fx:number) {              // удаление из одной Cell и перенос в другую Cell
-            let ind:number = this.field[obj.fy][obj.fx].objList.indexOf(obj);   // поиск индекса первого элемента obj в текущем objList Cell
-            console.log(ind);
-            if(ind>-1) this.field[obj.fy][obj.fx].objList.splice(ind,1);
-            obj.fy = fy; obj.fx = fx;
-            this.field[obj.fy][obj.fx].objList.push(obj);
-            console.log(this.field);
+        let free=true;    
+        for(let oo of this.field[fy][fx].objList){
+            if(oo.solid)
+                free=false;
+            oo.action();
+        }
+        if(!free)return;
+        let ind:number = this.field[obj.fy][obj.fx].objList.indexOf(obj);   // поиск индекса первого элемента obj в текущем objList Cell
+        console.log(ind);
+        if(ind>-1) this.field[obj.fy][obj.fx].objList.splice(ind,1);
+        obj.fy = fy; obj.fx = fx;
+        this.field[obj.fy][obj.fx].objList.push(obj);
+        console.log(this.field);
     }
     addPerson(obj:FieldObj){
         this.objList.push(obj);
@@ -63,17 +70,29 @@ class Cell {
 class FieldObj{
     color:string;
     face:Face = new Face(this);
+    solid:boolean=true;
     constructor(public fx:number,public fy:number){
         this.color=getRndClr();
+    }
+    action(){
+        console.log('action');
     }
 }
 
 class Person extends FieldObj{
     private name:string;
+    txtbox:TextBox;
+    brain:{act}={act:()=>{
+        if(this.txtbox){DRAW.remTextBox(this.txtbox);this.txtbox=null;}
+        DRAW.createDialogWin("Hi, my name is "+this.name,this.fx,this.fy-1);
+    }}
     constructor(name:string,field:Field,fy:number,fx:number){
         super(fx,fy);
         this.name = name;
         field.addPerson(this);
+    }
+    action(){
+        this.brain.act();
     }
 }
 
