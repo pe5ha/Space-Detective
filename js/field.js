@@ -90,18 +90,16 @@ class FieldObj {
 class Person extends FieldObj {
     constructor(name, field, fy, fx) {
         super(fx, fy);
-        this.brain = { act: () => {
-                if (this.txtbox) {
-                    DRAW.remTextBox(this.txtbox);
-                    this.txtbox = null;
-                }
-                DRAW.createDialogWin("Hi, my name is " + this.name, this.fx, this.fy - 1);
-            } };
+        this.brain = { act: () => ("Hi, my name is " + this.name) };
         this.name = name;
         field.addPerson(this);
     }
     action() {
-        this.brain.act();
+        if (this.txtbox) {
+            DRAW.remTextBox(this.txtbox);
+            this.txtbox = null;
+        }
+        DRAW.createDialogWin(this.brain.act(), this.fx, this.fy - 1);
     }
 }
 class Objects {

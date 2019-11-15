@@ -82,17 +82,15 @@ class FieldObj{
 class Person extends FieldObj{
     private name:string;
     txtbox:TextBox;
-    brain:{act}={act:()=>{
-        if(this.txtbox){DRAW.remTextBox(this.txtbox);this.txtbox=null;}
-        DRAW.createDialogWin("Hi, my name is "+this.name,this.fx,this.fy-1);
-    }}
+    brain:{act}={act:()=>("Hi, my name is "+this.name)}
     constructor(name:string,field:Field,fy:number,fx:number){
         super(fx,fy);
         this.name = name;
         field.addPerson(this);
     }
     action(){
-        this.brain.act();
+        if(this.txtbox){DRAW.remTextBox(this.txtbox);this.txtbox=null;}
+        DRAW.createDialogWin(this.brain.act(),this.fx,this.fy-1);
     }
 }
 
