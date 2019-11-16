@@ -1,4 +1,5 @@
 import { Face, DRAW } from "./draw.js";
+import { Brain } from "./brain.js";
 class Field {
     constructor(h = 5, w = 5) {
         this.h = h;
@@ -90,8 +91,9 @@ class FieldObj {
 class Person extends FieldObj {
     constructor(name, field, fy, fx) {
         super(fx, fy);
-        this.brain = { act: () => ("Hi, my name is " + this.name) };
+        this.attributes = {};
         this.name = name;
+        this.brain = new Brain(this);
         field.addPerson(this);
         this.brain = new Brain(name);
     }
@@ -100,7 +102,7 @@ class Person extends FieldObj {
             DRAW.remTextBox(this.txtbox);
             this.txtbox = null;
         }
-        DRAW.createDialogWin(this.brain.act(), this.fx, this.fy - 1);
+        DRAW.createDialogWin(this.brain.getDialogline(), this.fx, this.fy - 1);
     }
 }
 class Objects {
