@@ -1,29 +1,35 @@
-import { Field, Person } from "./field.js";
+import { Field, Player } from "./field.js";
 import { DRAW } from "./draw.js";
 let canv = document.getElementById('canvas');
 let mainctx = canv.getContext('2d');
 let mainField;
-let Player;
+let player;
+let keyboard = {};
 initGame();
 //alert("SPACE DETECTIVE HELLOOOOO");    
 mainLoop();
 function mainLoop() {
-    allMove(); //комментарий для теста на гитхабе
+    allMove();
     allAction();
     allDraw();
-    requestAnimationFrame(mainLoop);
+    // requestAnimationFrame(mainLoop);
+    setTimeout(mainLoop, 10);
 }
 function initGame() {
-    mainField = new Field();
-    Player = new Person("Player1", mainField, 1, 2);
+    mainField = new Field(20, 20);
+    player = new Player("Player1", mainField, 1, 2);
     console.log(mainField.getFieldAll());
     function keyPress(e) {
-        if (37 <= e.keyCode && e.keyCode <= 40)
-            mainField.move(e.keyCode, Player);
+        keyboard[e.key] = true;
+    }
+    function keyUp(e) {
+        keyboard[e.key] = false;
     }
     addEventListener("keydown", keyPress); // слушатель клавиатуры
+    addEventListener("keyup", keyUp);
 }
 function allMove() {
+    player.move();
 }
 function allAction() {
     //console.log('af');
@@ -32,5 +38,5 @@ function allDraw() {
     // console.log('af');
     DRAW.drawField(mainctx, 0, 0, canv.width, canv.height);
 }
-export { mainField };
+export { mainField, keyboard };
 //# sourceMappingURL=main.js.map

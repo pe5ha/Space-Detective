@@ -1,4 +1,5 @@
 import { Face } from "./draw.js";
+import { mainField, keyboard } from "./main.js";
 class Field {
     constructor(h = 5, w = 5) {
         this.h = h;
@@ -14,27 +15,23 @@ class Field {
             }
         }
     }
-    move(key, obj) {
-        // console.log("in move");
-        switch (key) {
-            case 37: // если нажата клавиша влево
-                if (obj.fx > 0)
-                    this.updateObjList(obj, obj.fy, obj.fx - 1);
-                break;
-            case 38: // если нажата клавиша вверх
-                if (obj.fy > 0)
-                    this.updateObjList(obj, obj.fy - 1, obj.fx);
-                break;
-            case 39: // если нажата клавиша вправо
-                if (obj.fx < this.w - 1)
-                    this.updateObjList(obj, obj.fy, obj.fx + 1);
-                break;
-            case 40: // если нажата клавиша вниз
-                if (obj.fy < this.h - 1)
-                    this.updateObjList(obj, obj.fy + 1, obj.fx);
-                break;
-        }
-    }
+    // move(key:number,obj:FieldObj){
+    //     // console.log("in move");
+    //     switch(key){
+    //         case 37:  // если нажата клавиша влево
+    //             if(obj.fx>0) this.updateObjList(obj,obj.fy,obj.fx-1);
+    //             break;
+    //         case 38:   // если нажата клавиша вверх
+    //             if(obj.fy>0) this.updateObjList(obj,obj.fy-1,obj.fx);
+    //             break;
+    //         case 39:   // если нажата клавиша вправо
+    //             if(obj.fx<this.w-1) this.updateObjList(obj,obj.fy,obj.fx+1);
+    //             break;
+    //         case 40:   // если нажата клавиша вниз
+    //             if(obj.fy<this.h-1) this.updateObjList(obj,obj.fy+1,obj.fx);    
+    //             break;
+    //     }
+    // }
     updateObjList(obj, fy, fx) {
         let ind = this.field[obj.fy][obj.fx].objList.indexOf(obj); // поиск индекса первого элемента obj в текущем objList Cell
         console.log(ind);
@@ -65,10 +62,10 @@ class Cell {
     }
 }
 class FieldObj {
-    constructor(fx, fy) {
-        this.fx = fx;
-        this.fy = fy;
+    constructor(fy, fx) {
         this.face = new Face(this);
+        this.fy = fy;
+        this.fx = fx;
         this.color = getRndClr();
     }
 }
@@ -79,11 +76,38 @@ class Person extends FieldObj {
         field.addPerson(this);
     }
 }
-class Objects {
-    constructor(solid = false) {
+class Player extends Person {
+    constructor(name, field, fy, fx) {
+        super(name, field, fy, fx);
+    }
+    move() {
+        // console.log("in move");
+        // if(keyboard.ArrowLeft && keyboard.ArrowUp && this.fx>0 && this.fy>0) mainField.updateObjList(this,this.fy-1,this.fx-1);
+        // else if(keyboard.ArrowUp && keyboard.ArrowRight && this.fx<mainField.w-1 && this.fy>0) mainField.updateObjList(this,this.fy-1,this.fx+1);
+        // else if(keyboard.ArrowRight && keyboard.ArrowDown && this.fx<mainField.w-1 && this.fy<mainField.h-1) mainField.updateObjList(this,this.fy+1,this.fx+1);           
+        // else if(keyboard.ArrowDown && keyboard.ArrowLeft && this.fy<mainField.h-1 && this.fx>0) mainField.updateObjList(this,this.fy+1,this.fx-1);
+        if (keyboard.ArrowLeft && this.fx > 0)
+            mainField.updateObjList(this, this.fy, this.fx - 1); // если нажата клавиша влево
+        if (keyboard.ArrowUp && this.fy > 0)
+            mainField.updateObjList(this, this.fy - 1, this.fx); // если нажата клавиша вверх
+        if (keyboard.ArrowRight && this.fx < mainField.w - 1)
+            mainField.updateObjList(this, this.fy, this.fx + 1); // если нажата клавиша вправо
+        if (keyboard.ArrowDown && this.fy < mainField.h - 1)
+            mainField.updateObjList(this, this.fy + 1, this.fx); // если нажата клавиша вниз
+    }
+}
+class Objects extends FieldObj {
+    constructor(fy, fx) {
+        super(fy, fx);
+    }
+}
+class Walls extends Objects {
+    constructor(fy, fx, solid = false) {
+        super(fy, fx);
         this.solid = solid;
     }
 }
+// private solid:boolean=false
 function getRndClr() {
     let n = ~~(Math.random() * 0xffffff);
     let clr = n.toString(16);
@@ -91,5 +115,5 @@ function getRndClr() {
         clr = "0" + clr;
     return "#" + clr;
 }
-export { Field, Person, FieldObj, Cell };
+export { Field, Person, Player, FieldObj, Cell };
 //# sourceMappingURL=field.js.map
