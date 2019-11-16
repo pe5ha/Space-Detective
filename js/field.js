@@ -93,6 +93,7 @@ class Person extends FieldObj {
         this.brain = { act: () => ("Hi, my name is " + this.name) };
         this.name = name;
         field.addPerson(this);
+        this.brain = new Brain(name);
     }
     action() {
         if (this.txtbox) {

@@ -87,6 +87,7 @@ class Person extends FieldObj{
         super(fx,fy);
         this.name = name;
         field.addPerson(this);
+        this.brain=new Brain(name);
     }
     action(){
         if(this.txtbox){DRAW.remTextBox(this.txtbox);this.txtbox=null;}
