@@ -1,6 +1,6 @@
 import { Field, Person, getRndClr } from "./field.js";
 import { DRAW } from "./draw.js";
-import { names } from "./brain.js";
+import { names, allDialogs } from "./brain.js";
 
 let canv:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('canvas');
 let mainctx = canv.getContext('2d');
@@ -59,6 +59,5 @@ function allAction(){
 function allDraw(){
 	DRAW.drawField(mainctx);
 }
-
 
 export {mainField, player};
