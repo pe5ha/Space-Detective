@@ -1,6 +1,5 @@
 import { Field, Person } from "./field.js";
 import { DRAW } from "./draw.js";
-import { initBrain } from "./brain.js";
 let canv = document.getElementById('canvas');
 let mainctx = canv.getContext('2d');
 let mainField;

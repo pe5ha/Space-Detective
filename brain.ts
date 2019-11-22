@@ -57,7 +57,7 @@ type Dialog = {cond:Condition, repl:Reply}[];
 let Bobby1:Brain; 
 let Bobby2:Brain;
 
-//НЕ запускалось т к есть один баг в ts: Когда он авто-импортирует всякую фигню из др файлов,
+//НЕ запускать т к есть один баг в ts: Когда он авто-импортирует всякую фигню из др файлов,
 // (например из main.js как в первой строчке) он забывает ставить ".js"! см первую строчку!
 
 function initBrain(){   //Эта функция вызовется перед началом игры. Здесь пиши все что хочешь создать перед игрой.
@@ -75,11 +75,11 @@ function initBrain(){   //Эта функция вызовется перед н
 
 }
  //Я еще написал эту ф. Можешь удалить и сам что-нить написать.
-function getDialogLine(dial:Dialog, speaker:Person):string{    //Принимает диалог и того кто говорит, возвр - текст реплики
-    for(let line of dial)
-        if(line.cond())return line.repl;
-    return null;
-}
+// function getDialogLine(dial:Dialog, speaker:Person):string{    //Принимает диалог и того кто говорит, возвр - текст реплики
+//     for(let line of dial)
+//         if(line.cond())return line.repl;
+//     return null;
+// }
 
   let allDialogs = {
      booby1:
@@ -88,7 +88,7 @@ function getDialogLine(dial:Dialog, speaker:Person):string{    //Принима�
         {cond:()=>{return Bobby1.pers.attributes.apples==0}, repl:"Нет, у меня нет яблок."},
         {cond:()=>{return Bobby1.pers.attributes.apples}, repl:"У меня " + Bobby1.pers.attributes.apples + "яблок"},
         {cond:()=>{return (Bobby1.pers.attributes.apples-=Nums)>=0}, repl:"Держи" + Nums + "яблок"},
-        {cond:()=>{return (Bobby1.pers.attributes.apples-=Nums)<0}, repl:"У меня нет" + Nums + "яблок"},
+        {cond:()=>{return (Bobby1.pers.attributes.apples-Nums)<0}, repl:"У меня нет" + Nums + "яблок"},
      ],
      booby2: [
         {cond:()=>{return Bobby2.pers.attributes.apples!=0}, repl:"Да, у меня есть яблоки."},
