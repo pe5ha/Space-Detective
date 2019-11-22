@@ -29,7 +29,7 @@ export function drawApolloBalls(){
     arrRemAll(balls,(b)=>(deadBalls.indexOf(b)>=0));
     deadBalls=[];
     for(let ba of balls){
-        drawCircle( mainctx, ba.x,ba.y,ba.r,ba.clr);
+        drawCircle( mainctx, ba.x,ba.y,ba.r,ba.clr,3);
     }
 
 
