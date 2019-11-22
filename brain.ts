@@ -10,6 +10,8 @@ export let names:string[]=[
     "Bob5"
 ]
 
+let Nums;//temprary var for transfering numbers from getDIalogLines into AllDialogs
+
 class Brain{
     
     pers:Person;
@@ -22,6 +24,7 @@ class Brain{
         this.nameOfNpc=perss.name;
         this.pers.attributes.eyes;
         this.pers.attributes.smell;
+        this.pers.attributes.apples;
         this.mydial = allDialogs[this.nameOfNpc];
     }
 
@@ -67,6 +70,9 @@ function initBrain(){   //Эта функция вызовется перед н
     // Bobby1.nameOfNpc = "Bobby1"; //      Это менять не надо, оно пусть задается через НПС и не меняется никогда
     Bobby2.pers.attributes.smell = "good";
     // Bobby2.nameOfNpc = "Bobby2" ;
+    Bobby2.pers.attributes.apples = 5;
+    Bobby1.pers.attributes.apples = 0;
+
 }
  //Я еще написал эту ф. Можешь удалить и сам что-нить написать.
 function getDialogLine(dial:Dialog, speaker:Person):string{    //Принимает диалог и того кто говорит, возвр - текст реплики
@@ -78,12 +84,18 @@ function getDialogLine(dial:Dialog, speaker:Person):string{    //Принима�
   let allDialogs = {
      booby1:
      [
-         {cond:()=>{return Bobby1.pers.attributes.eyes==6}, repl:"I can see you 6th times"},
-         {cond:()=>{return Bobby1.pers.attributes.eyes!=6}, repl:"Raise my eyes!"},
+        {cond:()=>{return Bobby1.pers.attributes.apples!=0}, repl:"Да, у меня есть яблоки."},
+        {cond:()=>{return Bobby1.pers.attributes.apples==0}, repl:"Нет, у меня нет яблок."},
+        {cond:()=>{return Bobby1.pers.attributes.apples}, repl:"У меня " + Bobby1.pers.attributes.apples + "яблок"},
+        {cond:()=>{return (Bobby1.pers.attributes.apples-=Nums)>=0}, repl:"Держи" + Nums + "яблок"},
+        {cond:()=>{return (Bobby1.pers.attributes.apples-=Nums)<0}, repl:"У меня нет" + Nums + "яблок"},
      ],
      booby2: [
-        {cond:()=>{return Bobby2.pers.attributes.smell!=="fu"}, repl:"sory, didnt brush my teeth"},
-        {cond:()=>{return Bobby2.pers.attributes.smell=="good"}, repl:"Ye. I use Axe - strong power!"},
+        {cond:()=>{return Bobby2.pers.attributes.apples!=0}, repl:"Да, у меня есть яблоки."},
+        {cond:()=>{return Bobby2.pers.attributes.apples==0}, repl:"Нет, у меня нет яблок."},
+        {cond:()=>{return Bobby2.pers.attributes.apples}, repl:"У меня " + Bobby1.pers.attributes.apples + "яблок"},
+        {cond:()=>{return (Bobby2.pers.attributes.apples-=Nums)>=0}, repl:"Держи" + Nums + "яблок"},
+        {cond:()=>{return (Bobby2.pers.attributes.apples-=Nums)<0}, repl:"У меня нет" + Nums + "яблок"},
      ],
      bob3: [],
      bob4: [],
