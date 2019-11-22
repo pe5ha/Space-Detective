@@ -1,6 +1,10 @@
 import { Field, Person, getRndClr } from "./field.js";
 import { DRAW } from "./draw.js";
+<<<<<<< HEAD
 import { names, allDialogs } from "./brain.js";
+=======
+import { names, initBrain } from "./brain.js";
+>>>>>>> a1a60b4726cb727a1e27dd5467d30ee99612061e
 
 let canv:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('canvas');
 let mainctx = canv.getContext('2d');
@@ -27,10 +31,11 @@ let tb,tb2;
 function initGame(){
 	mainField = new Field(24,10);
 	player = new Person("Player",mainField,0,0);
-	new Person(names[0], mainField, 2,2);
-	new Person(names[1], mainField, 3,4);
+	// new Person(names[0], mainField, 2,2);
+	// new Person(names[1], mainField, 3,4);
 	DRAW.init(canv.width,canv.height);
-	console.log(mainField.getFieldAll());
+	// console.log(mainField.getFieldAll());
+	initBrain();
 
 	function keyPress(e:any) {
 		if (37 <= e.keyCode && e.keyCode <= 40) mainField.move(e.keyCode,player);

@@ -95,6 +95,7 @@ class Person extends FieldObj {
         this.name = name;
         this.brain = new Brain(this);
         field.addPerson(this);
+        this.brain = new Brain(this);
     }
     action() {
         if (this.txtbox) {
