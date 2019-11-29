@@ -1,6 +1,14 @@
 import { Field, Person, getRndClr } from "./field.js";
+<<<<<<< HEAD
 import { DRAW, PixiRenderer } from "./draw.js";
+=======
+import { DRAW } from "./draw.js";
+<<<<<<< HEAD
+import { names, allDialogs } from "./brain.js";
+=======
+>>>>>>> 5ac0a56246fb98cea435937794dd056e7d18168c
 import { names, initBrain } from "./brain.js";
+>>>>>>> a1a60b4726cb727a1e27dd5467d30ee99612061e
 
 let canv:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('canvas');
 let mainctx = canv.getContext('2d');
@@ -84,6 +92,7 @@ function allDraw(){
 	DRAW.drawField(mainctx);
 }
 
+<<<<<<< HEAD
 
 
 
@@ -110,3 +119,6 @@ function loadingWaiter(callBack:Function, waiter:{complete:boolean, loaded:numbe
 }
 
 export {mainField, player, initCanvas};
+=======
+export {mainField, player};
+>>>>>>> 5ac0a56246fb98cea435937794dd056e7d18168c
