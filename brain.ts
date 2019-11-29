@@ -1,3 +1,4 @@
+
 import { mainField } from "./main.js";
 import { DRAW } from "./draw.js";
 import { Person } from "./field.js";
@@ -54,6 +55,7 @@ class Brain{
 type Reply = string;
 type Condition = ()=>boolean;
 type Dialog = {cond:Condition, repl:Reply}[];
+
 let Bobby1:Brain; 
 let Bobby2:Brain;
 
