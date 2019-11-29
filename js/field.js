@@ -1,4 +1,5 @@
-import { Face } from "./draw.js";
+import { Face, DRAW } from "./draw.js";
+import { Brain } from "./brain.js";
 class Field {
     constructor(h = 5, w = 5) {
         this.h = h;
@@ -16,6 +17,7 @@ class Field {
     }
     move(key, obj) {
         // console.log("in move");
+        DRAW.remAllTextBoxes();
         switch (key) {
             case 37: // если нажата клавиша влево
                 if (obj.fx > 0)
@@ -36,20 +38,28 @@ class Field {
         }
     }
     updateObjList(obj, fy, fx) {
+        let free = true;
+        for (let oo of this.field[fy][fx].objList) {
+            if (oo.solid)
+                free = false;
+            oo.action();
+        }
+        if (!free)
+            return;
         let ind = this.field[obj.fy][obj.fx].objList.indexOf(obj); // поиск индекса первого элемента obj в текущем objList Cell
-        console.log(ind);
         if (ind > -1)
             this.field[obj.fy][obj.fx].objList.splice(ind, 1);
         obj.fy = fy;
         obj.fx = fx;
         this.field[obj.fy][obj.fx].objList.push(obj);
-        console.log(this.field);
     }
     addPerson(obj) {
         this.objList.push(obj);
         this.field[obj.fy][obj.fx].addPerson(obj); // вызов <Cell>.addPerson
     }
     getField(y, x) {
+        if (y < 0 || x < 0 || y >= this.h || x >= this.w)
+            return null;
         return this.field[y][x];
     }
     getFieldAll() {
@@ -69,14 +79,28 @@ class FieldObj {
         this.fx = fx;
         this.fy = fy;
         this.face = new Face(this);
+        this.solid = true;
         this.color = getRndClr();
+    }
+    action() {
+        console.log('action');
     }
 }
 class Person extends FieldObj {
     constructor(name, field, fy, fx) {
         super(fx, fy);
+        this.attributes = {};
         this.name = name;
+        this.brain = new Brain(this);
         field.addPerson(this);
+        this.brain = new Brain(this);
+    }
+    action() {
+        if (this.txtbox) {
+            DRAW.remTextBox(this.txtbox);
+            this.txtbox = null;
+        }
+        DRAW.createDialogWin(this.brain.getDialogline(), this.fx, this.fy - 1);
     }
 }
 class Objects {
@@ -84,7 +108,7 @@ class Objects {
         this.solid = solid;
     }
 }
-function getRndClr() {
+export function getRndClr() {
     let n = ~~(Math.random() * 0xffffff);
     let clr = n.toString(16);
     while (clr.length < 6)

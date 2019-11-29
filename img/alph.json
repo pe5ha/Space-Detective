@@ -1,0 +1,80 @@
+{
+"frames": {
+	"alphonse_30.png": {
+		"frame": {"x":143, "y":73, "w":54, "h":72},
+		"spriteSourceSize": {"x":0,"y":0,"w":54,"h":72},
+		"sourceSize": {"w":54,"h":72}
+	},
+	"alphonse_31.png": {
+		"frame": {"x":190, "y":0, "w":54, "h":72},
+		"spriteSourceSize": {"x":0,"y":0,"w":54,"h":72},
+		"sourceSize": {"w":54,"h":72}
+	},
+	"alphonse_32.png": {
+		"frame": {"x":143, "y":146, "w":54, "h":72},
+		"spriteSourceSize": {"x":0,"y":0,"w":54,"h":72},
+		"sourceSize": {"w":54,"h":72}
+	},
+	"alphonse_33.png": {
+		"frame": {"x":143, "y":73, "w":54, "h":72},
+		"spriteSourceSize": {"x":0,"y":0,"w":54,"h":72},
+		"sourceSize": {"w":54,"h":72}
+	},
+	"alphonse_34.png": {
+		"frame": {"x":198, "y":73, "w":54, "h":72},
+		"spriteSourceSize": {"x":0,"y":0,"w":54,"h":72},
+		"sourceSize": {"w":54,"h":72}
+	},
+	"alphonse_35.png": {
+		"frame": {"x":135, "y":0, "w":54, "h":72},
+		"spriteSourceSize": {"x":0,"y":0,"w":54,"h":72},
+		"sourceSize": {"w":54,"h":72}
+	},
+	"alphonse_36.png": {
+		"frame": {"x":79, "y":0, "w":55, "h":72},
+		"spriteSourceSize": {"x":0,"y":0,"w":55,"h":72},
+		"sourceSize": {"w":55,"h":72}
+	},
+	"alphonse_37.png": {
+		"frame": {"x":143, "y":73, "w":54, "h":72},
+		"spriteSourceSize": {"x":0,"y":0,"w":54,"h":72},
+		"sourceSize": {"w":54,"h":72}
+	},
+	"alphonserun_41.png": {
+		"frame": {"x":72, "y":175, "w":70, "h":61},
+		"spriteSourceSize": {"x":0,"y":0,"w":70,"h":61},
+		"sourceSize": {"w":70,"h":61}
+	},
+	"alphonserun_42.png": {
+		"frame": {"x":0, "y":113, "w":71, "h":58},
+		"spriteSourceSize": {"x":0,"y":0,"w":71,"h":58},
+		"sourceSize": {"w":71,"h":58}
+	},
+	"alphonserun_43.png": {
+		"frame": {"x":0, "y":172, "w":71, "h":57},
+		"spriteSourceSize": {"x":0,"y":0,"w":71,"h":57},
+		"sourceSize": {"w":71,"h":57}
+	},
+	"alphonserun_44.png": {
+		"frame": {"x":72, "y":113, "w":70, "h":61},
+		"spriteSourceSize": {"x":0,"y":0,"w":70,"h":61},
+		"sourceSize": {"w":70,"h":61}
+	},
+	"alphonserun_45.png": {
+		"frame": {"x":0, "y":56, "w":77, "h":56},
+		"spriteSourceSize": {"x":0,"y":0,"w":77,"h":56},
+		"sourceSize": {"w":77,"h":56}
+	},
+	"alphonserun_46.png": {
+		"frame": {"x":0, "y":0, "w":78, "h":55},
+		"spriteSourceSize": {"x":0,"y":0,"w":78,"h":55},
+		"sourceSize": {"w":78,"h":55}
+	}
+
+},
+"meta": {
+	"image": "alph.png",
+	"size": {"w": 253, "h": 237},
+	"scale": "1"
+}
+}

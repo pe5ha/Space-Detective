@@ -1,4 +1,6 @@
-import { Face } from "./draw.js";
+import { Face, DRAW, TextBox } from "./draw.js";
+
+import { Brain } from "./brain.js";
 
 class Field{
     private field:Cell[][] = [];
@@ -16,7 +18,7 @@ class Field{
     }
     move(key:number,obj:FieldObj){
         // console.log("in move");
-
+        DRAW.remAllTextBoxes();
         switch(key){
             case 37:  // если нажата клавиша влево
                 if(obj.fx>0) this.updateObjList(obj,obj.fy,obj.fx-1);
@@ -33,18 +35,24 @@ class Field{
         }
     }
     updateObjList(obj:FieldObj,fy:number,fx:number) {              // удаление из одной Cell и перенос в другую Cell
-            let ind:number = this.field[obj.fy][obj.fx].objList.indexOf(obj);   // поиск индекса первого элемента obj в текущем objList Cell
-            console.log(ind);
-            if(ind>-1) this.field[obj.fy][obj.fx].objList.splice(ind,1);
-            obj.fy = fy; obj.fx = fx;
-            this.field[obj.fy][obj.fx].objList.push(obj);
-            console.log(this.field);
+        let free=true;    
+        for(let oo of this.field[fy][fx].objList){
+            if(oo.solid)
+                free=false;
+            oo.action();
+        }
+        if(!free)return;
+        let ind:number = this.field[obj.fy][obj.fx].objList.indexOf(obj);   // поиск индекса первого элемента obj в текущем objList Cell
+        if(ind>-1) this.field[obj.fy][obj.fx].objList.splice(ind,1);
+        obj.fy = fy; obj.fx = fx;
+        this.field[obj.fy][obj.fx].objList.push(obj);
     }
     addPerson(obj:FieldObj){
         this.objList.push(obj);
         this.field[obj.fy][obj.fx].addPerson(obj); // вызов <Cell>.addPerson
     }
 	getField(y:number,x:number){
+        if(y<0 || x<0 || y>=this.h || x>= this.w)return null;
 		return this.field[y][x];
     }
     getFieldAll(){
@@ -62,17 +70,30 @@ class Cell {
 class FieldObj{
     color:string;
     face:Face = new Face(this);
+    solid:boolean=true;
     constructor(public fx:number,public fy:number){
         this.color=getRndClr();
+    }
+    action(){
+        console.log('action');
     }
 }
 
 class Person extends FieldObj{
-    private name:string;
+    attributes:any = {};
+    name:string;
+    txtbox:TextBox;
+    brain:Brain;
     constructor(name:string,field:Field,fy:number,fx:number){
         super(fx,fy);
         this.name = name;
+        this.brain=new Brain(this);
         field.addPerson(this);
+        this.brain=new Brain(this);
+    }
+    action(){
+        if(this.txtbox){DRAW.remTextBox(this.txtbox);this.txtbox=null;}
+        DRAW.createDialogWin(this.brain.getDialogline(),this.fx,this.fy-1);
     }
 }
 
@@ -81,7 +102,7 @@ class Objects{
 
 }
 
-function getRndClr() {
+export function getRndClr() {
     let n = ~~(Math.random()*0xffffff);
     let clr=n.toString(16);
     while(clr.length<6)clr="0"+clr;

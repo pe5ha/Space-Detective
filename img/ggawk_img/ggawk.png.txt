@@ -1,0 +1,1 @@
+ggawk_01.png.png 16 11, ggawk_02.png.png 15 89, ggawk_03.png.png 105 94, ggawk_04.png.png 177 94, ggawk_05.png.png 257 94, ggawk_06.png.png 338 89, ggawk_07.png.png 421 81, ggawk_08.png.png 9 156, ggawk_09.png.png 90 156, ggawk_10.png.png 171 156, ggawk_11.png.png 252 156.
