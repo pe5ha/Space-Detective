@@ -70,6 +70,7 @@ function allAction() {
 function allDraw() {
     DRAW.drawField(mainctx);
 }
+//It waits and draws loading screen
 function loadingWaiter(callBack, waiter) {
     let ang = 0, lx = canv.width / 2, ly = canv.height / 2;
     mainctx.strokeStyle = '#449933';

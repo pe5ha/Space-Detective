@@ -84,7 +84,6 @@ function allDraw(){
 	DRAW.drawField(mainctx);
 }
 
-<<<<<<< HEAD
 
 
 
@@ -111,6 +110,3 @@ function loadingWaiter(callBack:Function, waiter:{complete:boolean, loaded:numbe
 }
 
 export {mainField, player, initCanvas};
-=======
-export {mainField, player};
->>>>>>> 5ac0a56246fb98cea435937794dd056e7d18168c
