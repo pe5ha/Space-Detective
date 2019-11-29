@@ -1,19 +1,41 @@
 import { Field, Person } from "./field.js";
-import { DRAW } from "./draw.js";
+import { DRAW, PixiRenderer } from "./draw.js";
 import { initBrain } from "./brain.js";
 let canv = document.getElementById('canvas');
 let mainctx = canv.getContext('2d');
+export let stepN = 0, deltaTime = { last: 0, delta: 0 }; //No. of iteration of main loop
 let mainField;
 let player;
-initCanvas(canv);
-initGame();
+// initCanvas(canv);
 //alert("SPACE DETECTIVE HELLOOOOO");    
-mainLoop();
+//lets load all our images in PIXI
+PixiRenderer.init();
+PixiRenderer.addJson("img/otus.json");
+PixiRenderer.addJson("img/alph.json");
+PixiRenderer.addJson("img/gawk.json");
+PixiRenderer.addJson("img/ggawk.json");
+let waiter = PixiRenderer.load();
+//we need to wait for it to load now
+loadingWaiter(continueStart, waiter); //  MAIN LOOP START
+//this is what we call after all imgs are loaded
+function continueStart() {
+    initGame();
+    console.log('gStart ending.. starting Main Loop.');
+    mainLoop();
+}
 function mainLoop() {
     allMove(); //комментарий для теста на гитхабе
     allAction();
     allDraw();
     requestAnimationFrame(mainLoop);
+    updateStepCounters();
+    function updateStepCounters() {
+        if (true)
+            stepN++;
+        let n = Date.now();
+        deltaTime.delta = n - deltaTime.last;
+        deltaTime.last = n;
+    }
 }
 let tb, tb2;
 function initGame() {
@@ -48,5 +70,25 @@ function allAction() {
 function allDraw() {
     DRAW.drawField(mainctx);
 }
-export { mainField, player };
+//It waits and draws loading screen
+function loadingWaiter(callBack, waiter) {
+    let ang = 0, lx = canv.width / 2, ly = canv.height / 2;
+    mainctx.strokeStyle = '#449933';
+    mainctx.lineWidth = 5;
+    loading();
+    function loading() {
+        // console.log('loading in progress... time '+(now()-begTime));
+        if (waiter.complete)
+            callBack();
+        else {
+            mainctx.beginPath();
+            mainctx.clearRect(lx - 50, ly - 50, 100, 100);
+            mainctx.arc(lx, ly, 40, ang / 2, ang, ang > 12.56);
+            mainctx.stroke();
+            ang = (waiter.loaded / (waiter.all || 1)) * 25.12 * 1 % 25.12; //(ang+.1)%25.12;
+            setTimeout(loading, 5);
+        }
+    }
+}
+export { mainField, player, initCanvas };
 //# sourceMappingURL=main.js.map

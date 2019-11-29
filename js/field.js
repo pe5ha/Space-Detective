@@ -47,13 +47,11 @@ class Field {
         if (!free)
             return;
         let ind = this.field[obj.fy][obj.fx].objList.indexOf(obj); // поиск индекса первого элемента obj в текущем objList Cell
-        console.log(ind);
         if (ind > -1)
             this.field[obj.fy][obj.fx].objList.splice(ind, 1);
         obj.fy = fy;
         obj.fx = fx;
         this.field[obj.fy][obj.fx].objList.push(obj);
-        console.log(this.field);
     }
     addPerson(obj) {
         this.objList.push(obj);

@@ -1,5 +1,5 @@
 import { Field, FieldObj, Cell } from "./field.js";
-import { mainField, player } from "./main.js";
+import { mainField, player, initCanvas, deltaTime } from "./main.js";
 
 class DRAW{
     static cellS:number=40;
@@ -23,6 +23,10 @@ class DRAW{
         console.log(this.fvh);
 
         
+        PixiRenderer.addJson("img/otus.json");
+        PixiRenderer.addJson("img/alph.json");
+        PixiRenderer.addJson("img/gawk.json");
+        PixiRenderer.addJson("img/ggawk.json");
         
         // this.cellS=Math.min(40,~~(this.w/mainField.w),~~(this.h/mainField.h));
         let all=" aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ1234567890,.!?";
@@ -144,21 +148,137 @@ class TextBox{
 }
 
 class Face{
-    constructor(public obj:FieldObj){}
+    pixAni:PixiAniSprite;
+    constructor(public obj:FieldObj){
+        addSprite(this, 0);
+    }
     drawMe(ctx:CanvasRenderingContext2D,x:number,y:number,s:number){
         ctx.fillStyle = this.obj.color;
         ctx.beginPath();
         ctx.arc(x+1,y,s*.45,0,6.29);
         ctx.fill();
-    }
-}
-class WallFace extends Face{
-    drawMe(ctx:CanvasRenderingContext2D,x:number,y:number,s:number){
-        ctx.fillStyle = this.obj.color;
-        ctx.beginPath();
-        // ctx.moveTo(,);
-        ctx.fill();
+        this.pixAni.step(x,y,1)
     }
 }
 
-export{DRAW, Face, TextBox}
+//adds sprite to object
+function addSprite(face:Face, type:number){
+    switch(type){
+        case 0: 
+            face.pixAni=new PixiAniSprite([texNameHelper('otus_','.png',42,51),texNameHelper('otus_','.png',4,15)]);
+        break;
+        case 1: 
+            face.pixAni=new PixiAniSprite([texNameHelper('alphonse_','.png',30,37),texNameHelper('alphonserun_','.png',41,46)]);
+        break;
+        case 2: 
+            face.pixAni=new PixiAniSprite([texNameHelper('gawk_','.png',1,6),texNameHelper('gawk_','.png',1,6)]);
+        break;
+        case 3: 
+            face.pixAni=new PixiAniSprite([texNameHelper('ggawk_','.png',1,6),texNameHelper('ggawk_','.png',1,6)]);
+        break;
+    }
+}
+function texNameHelper(beg:string, end:string, i1:number, i2:number){
+    let res:string[]=[];
+    for(let i=i1; i<=i2; i++)
+        res.push(beg+((i<10)?'0':'')+i+end);
+    return res;
+}
+
+
+//Aliases
+let PIXI = window["PIXI"];  //perfect solution. thx ts
+let TextureCache = PIXI.utils.TextureCache,
+    pixiLoader = PIXI.Loader.shared;
+    
+class PixiRenderer{
+	private static pixiStage = new PIXI.Container();; 
+	static renderer;
+	static partCont = new PIXI.Container();// PIXI.ParticleContainer();;
+	private static jsons=[];
+	static init(){
+		this.pixiStage.addChild(this.partCont);
+		let pixiCanv:HTMLCanvasElement = <HTMLCanvasElement> document.getElementById("pixiCanv");
+		initCanvas(pixiCanv);
+		this.renderer = new PIXI.autoDetectRenderer(
+			{view: pixiCanv, width:pixiCanv.width, height:pixiCanv.height, antialias: false, transparent: true, resolution: 1}
+		);
+		console.log('pixi init...');
+	}
+	static render():void{
+		this.renderer.render(this.pixiStage);
+	}
+	static addJson(json:string){
+		this.jsons.push(json);
+	}
+
+	static load():{complete:boolean, loaded:number, all:number}{
+		let res = {complete:false, loaded:0, all:this.jsons.length};
+		let complLoad = ()=>{res.complete=true;}
+		let loadNext = ()=>{
+            res.loaded = res.all - this.jsons.length;
+            console.log('load..');
+            if(this.jsons.length){
+                pixiLoader.add(this.jsons.pop()).load(()=>{setTimeout(loadNext.bind(this), 1)});
+            }else complLoad();
+		}
+		loadNext();
+		return res; 
+	}
+}
+class PixiAniSprite extends PIXI.Sprite{
+    x:number;  y:number;	//inherit from Sprite
+      anchor:Point;		//inherit from Sprite
+      scale:Point;		//inherit from Sprite
+      texture:any;		//inherit from Sprite
+      w:number=0;  h:number=0;
+      textures:any[][] = [];
+      state:number = 0;
+      pos:number = 0;
+      timePerFr:number = 100;
+      lastTick:number = 0;
+  
+      constructor(private texNames:string[][]){
+          super(TextureCache[PIXI.Texture.from(texNames[0][0])]);
+          PixiRenderer.partCont.addChild(this);
+          for(let j=0; j<texNames.length;j++)
+          for(let i=0; i<texNames[j].length; i++){
+              let t = TextureCache[texNames[j][i]];
+              if(!this.textures[j])this.textures[j]=[];
+              this.textures[j][i]=t;
+              if(t.width>this.w)this.w = t.width;
+              if(t.height>this.h)this.h = t.height;
+          }
+          this.anchor = {x:.5, y:.5};	//also pivot can be used, but it shd change for evr new texture
+      }
+    
+      step(x:number, y:number, scaleX:number):void{
+        //   console.log(x);
+          this.x=x;
+          this.y=y;
+          this.lastTick += deltaTime.delta;
+          if(this.lastTick>this.timePerFr){
+          this.pos = (this.pos + ~~(this.lastTick/this.timePerFr)) % this.textures[this.state].length;
+          this.lastTick %= this.timePerFr;
+          this.updateTexture();
+          }
+          this.scale.x=scaleX;
+      }
+  
+      changeState(st){
+          if(!this.textures[st])throw new Error('pixi: no such state!');
+          if(this.state != st){
+          this.pos = 0;
+          this.state = st;
+          this.updateTexture();
+          }
+          
+      }
+  
+        updateTexture(){
+          this.texture = this.textures[this.state][this.pos];
+      }
+}
+class Point{constructor(public x:number, public y:number){}}
+
+export{DRAW, Face, TextBox, PixiRenderer}
