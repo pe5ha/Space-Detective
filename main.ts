@@ -2,21 +2,22 @@ import { Field, Person, getRndClr } from "./field.js";
 import { DRAW, PixiRenderer } from "./draw.js";
 import { names, initBrain } from "./brain.js";
 
-let canv:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('canvas');
+export let canv:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('canvas');
 let mainctx = canv.getContext('2d');
 export let stepN:number = 0, deltaTime:{last:number, delta:number} = {last:0, delta:0};   //No. of iteration of main loop
 let mainField : Field;
 let player : Person;
 
-// initCanvas(canv);
+initCanvas(canv);
 //alert("SPACE DETECTIVE HELLOOOOO");    
 
 //lets load all our images in PIXI
 PixiRenderer.init();
-PixiRenderer.addJson("img/otus.json");
-PixiRenderer.addJson("img/alph.json");
-PixiRenderer.addJson("img/gawk.json");
-PixiRenderer.addJson("img/ggawk.json");
+PixiRenderer.addUrl("img/otus.json");
+PixiRenderer.addUrl("img/alph.json");
+PixiRenderer.addUrl("img/gawk.json");
+PixiRenderer.addUrl("img/ggawk.json");
+PixiRenderer.addUrl("img/tiles.jpg");
 let waiter = PixiRenderer.load();
 
 //we need to wait for it to load now

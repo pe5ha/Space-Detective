@@ -45,6 +45,7 @@ class Field{
         let ind:number = this.field[obj.fy][obj.fx].objList.indexOf(obj);   // поиск индекса первого элемента obj в текущем objList Cell
         if(ind>-1) this.field[obj.fy][obj.fx].objList.splice(ind,1);
         obj.fy = fy; obj.fx = fx;
+        obj.face.objMovedTo(fx,fy);
         this.field[obj.fy][obj.fx].objList.push(obj);
     }
     addPerson(obj:FieldObj){
