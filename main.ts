@@ -1,5 +1,5 @@
 import { drawRandomPoints, initRandomPoints } from "./randompoints.js";
-import { initApolloBalls, drawApolloBalls } from "./apolloballs.js";
+import { initApolloBalls, drawApolloBalls } from "./apolloballs1.js";
 
 
 export let canv:HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('canvas');
@@ -16,7 +16,7 @@ init();
 // let abc=[50,0,450,0,500,250,250,500,0,250], xy={x:0,y:0};
 	
 
-export let bgclr="#000000";
+export var bgclr="#000000";
 
 mainctx.fillStyle=bgclr;
 mainctx.fillRect(0,0,canv.width,canv.height);

@@ -41,6 +41,8 @@ class Ball {
     }
     get rad() { return this.r; }
     turnInto(b) {
+        if (b.par != this)
+            console.log('aggasga');
         for (let cb of this.balls)
             deadBalls.push(cb);
         if (this == parball)
@@ -65,7 +67,7 @@ export function initApolloBalls() {
     parball.repel = .05;
     parball.maxs = 1;
     parball.clr2 = .05;
-    backclr = "#111111"; //toClr(new HSV(parball.clr1,.1,.2));
+    backclr = toClr(new HSV(parball.clr1, .1, .1));
     ee = { x: parball.x + parball.rad / 2, y: parball.y };
 }
 let newR = 5;
@@ -78,7 +80,7 @@ export function drawApolloBalls() {
         // parball.clr1+=.01;
     }
     if (msdown || autoclick)
-        if (++crtTimer > 4) {
+        if (++crtTimer > 3) {
             crtTimer = 0;
             let pb = allballs.reduce((b, nb) => {
                 if (nb.rad > 5 && dist(ee.x - nb.x, ee.y - nb.y) < nb.rad - newR && nb.rad < b.rad)
@@ -92,7 +94,7 @@ export function drawApolloBalls() {
         }
     // mainctx.fillStyle=bgclr;
     // mainctx.fillRect(0,0,canv.width,canv.height);
-    drawCircle(mainctx, parball.x, parball.y, parball.rad, backclr + '66');
+    drawCircle(mainctx, parball.x, parball.y, parball.rad + 1, backclr + '66');
     for (let ba of allballs) {
         moveB(ba);
     }
@@ -100,7 +102,7 @@ export function drawApolloBalls() {
     deadBalls.forEach((b) => { arrDel(b.par.balls, b); });
     deadBalls = [];
     for (let ba of allballs) {
-        drawCircle(mainctx, ba.x, ba.y, ba.rad - 2, ba.clr, mmin(ba.rad / 10, 3));
+        drawCircle(mainctx, ba.x, ba.y, ba.rad - 1, ba.clr, mmin(ba.rad / 10, 3));
     }
     function moveB(b) {
         if (b.par != parball && allballs.indexOf(b.par) < 0) {
@@ -143,6 +145,7 @@ export function drawApolloBalls() {
                 b.par.turnInto(b);
                 deadBalls.push(b);
             }
+            // console.log('GDSSDSGDSDGGDSDSG');
         }
         else {
             b.rad -= maxover; //if(maxover<b.r)
@@ -153,10 +156,15 @@ export function drawApolloBalls() {
         if (b.rad <= 3)
             deadBalls.push(b);
         function repel(b1, b2, cos, sin, p) {
-            // let coe=p/b1.rad*b.par.repel;
-            // b1.vx+=cos*coe;b1.vy+=sin*coe;
-            // coe=p/b2.rad*b.par.repel;
-            // b2.vx-=cos*coe;b2.vy-=sin*coe;
+            let coe = p / b1.rad * b.par.repel;
+            b1.vx += cos * coe;
+            b1.vy += sin * coe;
+            coe = p / b2.rad * b.par.repel;
+            b2.vx -= cos * coe;
+            b2.vy -= sin * coe;
+            // b.vx+=cos*p*.01;b.vy+=sin*p*.01;
+            // b.vx=Math.abs(cos)*p*.1;b.vy=Math.abs(sin)*p*.1;
+            // b.vx+=Math.abs(cos)*p*.1;b.vy+=Math.abs(sin)*p*.1;
         }
     }
 }
@@ -236,4 +244,4 @@ export function HSVtoRGB(hsv) {
 }
 export function mmax(x, y) { return Math.max(x, y); }
 export function mmin(x, y) { return Math.min(x, y); }
-//# sourceMappingURL=apolloballs.js.map
+//# sourceMappingURL=apolloballs1.js.map

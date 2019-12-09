@@ -1,4 +1,4 @@
-import { initApolloBalls, drawApolloBalls } from "./apolloballs.js";
+import { initApolloBalls, drawApolloBalls } from "./apolloballs1.js";
 export let canv = document.getElementById('canvas');
 initCanvas(canv);
 export let mainctx = canv.getContext('2d');
@@ -10,7 +10,7 @@ init();
 // let abc=[250,0,0,433,500,433], xy={x:250,y:216};
 // let abc=[0,0,500,0,500,500,0,500], xy={x:0,y:0};
 // let abc=[50,0,450,0,500,250,250,500,0,250], xy={x:0,y:0};
-export let bgclr = "#000000";
+export var bgclr = "#000000";
 mainctx.fillStyle = bgclr;
 mainctx.fillRect(0, 0, canv.width, canv.height);
 mainLoop();
