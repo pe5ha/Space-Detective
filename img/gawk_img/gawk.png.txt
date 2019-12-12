@@ -1,1 +1,0 @@
-gawk_01.png.png 16 11, gawk_02.png.png 15 89, gawk_03.png.png 105 94, gawk_04.png.png 177 94, gawk_05.png.png 257 94, gawk_06.png.png 338 89, gawk_07.png.png 421 81, gawk_08.png.png 9 156, gawk_09.png.png 90 156, gawk_10.png.png 171 156, gawk_11.png.png 252 156.

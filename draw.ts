@@ -1,5 +1,6 @@
 import { Field, FieldObj, Cell } from "./field.js";
 import { mainField, player, initCanvas, deltaTime, canv } from "./main.js";
+import { IMAGES } from "./loader.js";
 
 class DRAW{
     static cellS:number=40;
@@ -21,7 +22,7 @@ class DRAW{
         this.offx = w/2-this.cellS*(this.fvw+.5);
         this.offy = h/2-this.cellS*(this.fvh+.5);
         console.log(this.fvh);
-
+        this.FillFloor();
         
         // PixiRenderer.addUrl("img/otus.json");
         // PixiRenderer.addUrl("img/alph.json");
@@ -67,7 +68,31 @@ class DRAW{
     }
 
     static FillFloor(){
+        let map:number[][] = [
+            [0,0,0,0,0,0,0,0,0],
+            [0,1,1,1,0,0,0,0,0],
+            [0,1,1,1,0,0,0,0,0],
+            [0,1,1,1,0,0,0,0,0],
+            [0,0,1,0,0,0,0,0,0],
+            [0,0,1,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0],
+        ]
+        let can = document.createElement('canvas'), ctx = can.getContext('2d'),rnd, mapnames=['tile','rock'];
+        can.width=mainField.w*DRAW.cellS;
+        can.height=mainField.h*DRAW.cellS;
         
+
+        for(let i=0;i<Math.min(map[0].length,mainField.w);i++)
+            for(let j=0;j<Math.min(map.length,mainField.h);j++){
+                let imgc=IMAGES[mapnames[map[j][i]]];
+                rnd = ~~(Math.random()*imgc.canvs.length);
+                ctx.drawImage(imgc.canvs[rnd],i*DRAW.cellS,j*DRAW.cellS,DRAW.cellS,DRAW.cellS);
+            }
+                
+        let spr = new PIXI.Sprite(PIXI.Texture.from(can));
+        PixiRenderer.backCont.addChild(spr);
+
     }
 
     static drawTextBoxes(ctx){
@@ -158,8 +183,8 @@ class Face{
     pixAni:PixiAniSprite;
     objY:number = -Infinity;
     constructor(public obj:FieldObj){console.log('a');//
-    
-        addSprite(this, ~~(Math.random()*4));
+        this.pixAni=new PixiAniSprite((Math.random()>.3)?"otus":"alph",obj);
+        // addSprite(this, ~~(Math.random()*4));
         PixiRenderer.moveObj(this.pixAni,obj.fy);
     }
     drawMe(ctx:CanvasRenderingContext2D,x:number,y:number,s:number){
@@ -179,28 +204,28 @@ class Face{
 }
 
 //adds sprite to object
-function addSprite(face:Face, type:number){
-    switch(type){
-        case 0: 
-            face.pixAni=new PixiAniSprite([texNameHelper('otus_','.png',42,51),texNameHelper('otus_','.png',4,15)],face.obj);
-        break;
-        case 1: 
-            face.pixAni=new PixiAniSprite([texNameHelper('alphonse_','.png',30,37),texNameHelper('alphonserun_','.png',41,46)],face.obj);
-        break;
-        case 2: 
-            face.pixAni=new PixiAniSprite([texNameHelper('gawk_','.png',1,6),texNameHelper('gawk_','.png',1,6)],face.obj);
-        break;
-        case 3: 
-            face.pixAni=new PixiAniSprite([texNameHelper('ggawk_','.png',1,6),texNameHelper('ggawk_','.png',1,6)],face.obj);
-        break;
-    }
-}
-function texNameHelper(beg:string, end:string, i1:number, i2:number){
-    let res:string[]=[];
-    for(let i=i1; i<=i2; i++)
-        res.push(beg+((i<10)?'0':'')+i+end);
-    return res;
-}
+// function addSprite(face:Face, type:number){
+//     switch(type){
+//         case 0: 
+//             face.pixAni=new PixiAniSprite([texNameHelper('otus_','.png',42,51),texNameHelper('otus_','.png',4,15)],face.obj);
+//         break;
+//         case 1: 
+//             face.pixAni=new PixiAniSprite([texNameHelper('alphonse_','.png',30,37),texNameHelper('alphonserun_','.png',41,46)],face.obj);
+//         break;
+//         case 2: 
+//             face.pixAni=new PixiAniSprite([texNameHelper('gawk_','.png',1,6),texNameHelper('gawk_','.png',1,6)],face.obj);
+//         break;
+//         case 3: 
+//             face.pixAni=new PixiAniSprite([texNameHelper('ggawk_','.png',1,6),texNameHelper('ggawk_','.png',1,6)],face.obj);
+//         break;
+//     }
+// }
+// function texNameHelper(beg:string, end:string, i1:number, i2:number){
+//     let res:string[]=[];
+//     for(let i=i1; i<=i2; i++)
+//         res.push(beg+((i<10)?'0':'')+i+end);
+//     return res;
+// }
 
 
 //Aliases
@@ -259,29 +284,42 @@ class PixiRenderer{
 class PixiAniSprite extends PIXI.Sprite{
     x:number;  y:number;	//inherit from Sprite
       anchor:Point;		//inherit from Sprite
+      pivot;		//inherit from Sprite
       scale:Point;		//inherit from Sprite
       texture:any;		//inherit from Sprite
       w:number=0;  h:number=0;
-      textures:any[][] = [];
+      textures:any[][] = [[]];
       state:number = 0;
       pos:number = 0;
       timePerFr:number = 100;
       lastTick:number = 0;
   
-      constructor(private texNames:string[][], public obj:FieldObj){
-          super(TextureCache[texNames[0][0]]);
-          console.log('adsfadsfresgadfhaerher');
-          PixiRenderer.objCont.addChild(this);
-          for(let j=0; j<texNames.length;j++)
-          for(let i=0; i<texNames[j].length; i++){
-              let t = TextureCache[texNames[j][i]];
-              if(!this.textures[j])this.textures[j]=[];
-              this.textures[j][i]=t;
-              if(t.width>this.w)this.w = t.width;
-              if(t.height>this.h)this.h = t.height;
-          }
-          this.anchor = {x:.5, y:1};	//also pivot can be used, but it shd change for evr new texture
-      }
+      constructor(private name:string, public obj:FieldObj){
+        super(IMAGES[name].pixitexs[0]);
+        PixiRenderer.objCont.addChild(this);
+        let txs = IMAGES[name].pixitexs;
+        for(let j=0; j<txs.length;j++){
+            let t = txs[j];
+            this.textures[0][j]=t;
+            if(t.width>this.w)this.w = t.width;
+            if(t.height>this.h)this.h = t.height;
+        }
+        this.anchor = {x:.5, y:0.5};	//also pivot can be used, but it shd change for evr new texture
+        // this.pivot.set(0, 0*DRAW.cellS/2);
+    }
+    // constructor(private name:string, public obj:FieldObj){
+    //     super(TextureCache[texNames[0][0]]);
+    //     PixiRenderer.objCont.addChild(this);
+    //     for(let j=0; j<texNames.length;j++)
+    //     for(let i=0; i<texNames[j].length; i++){
+    //         let t = TextureCache[texNames[j][i]];
+    //         if(!this.textures[j])this.textures[j]=[];
+    //         this.textures[j][i]=t;
+    //         if(t.width>this.w)this.w = t.width;
+    //         if(t.height>this.h)this.h = t.height;
+    //     }
+    //     this.anchor = {x:.5, y:1};	//also pivot can be used, but it shd change for evr new texture
+    // }
     
       step(x:number, y:number, scaleX:number):void{
           this.x=x;

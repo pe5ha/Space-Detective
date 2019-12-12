@@ -1,28 +1,53 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import { Field, Person } from "./field.js";
 import { DRAW, PixiRenderer } from "./draw.js";
 import { initBrain } from "./brain.js";
+import { Loader, ImgComplex } from "./loader.js";
 export let canv = document.getElementById('canvas');
 let mainctx = canv.getContext('2d');
 export let stepN = 0, deltaTime = { last: 0, delta: 0 }; //No. of iteration of main loop
 let mainField;
 let player;
-initCanvas(canv);
 //alert("SPACE DETECTIVE HELLOOOOO");    
+initialisation();
 //lets load all our images in PIXI
-PixiRenderer.init();
-PixiRenderer.addUrl("img/otus.json");
-PixiRenderer.addUrl("img/alph.json");
-PixiRenderer.addUrl("img/gawk.json");
-PixiRenderer.addUrl("img/ggawk.json");
-PixiRenderer.addUrl("img/tiles.jpg");
-let waiter = PixiRenderer.load();
+// PixiRenderer.addUrl("img/otus.json");
+// PixiRenderer.addUrl("img/alph.json");
+// PixiRenderer.addUrl("img/gawk.json");
+// PixiRenderer.addUrl("img/ggawk.json");
+// PixiRenderer.addUrl("img/tiles.jpg");
+// let waiter = PixiRenderer.load();
 //we need to wait for it to load now
-loadingWaiter(continueStart, waiter); //  MAIN LOOP START
+// loadingWaiter(continueStart, waiter);     //  MAIN LOOP START
 //this is what we call after all imgs are loaded
-function continueStart() {
-    initGame();
-    console.log('gStart ending.. starting Main Loop.');
-    mainLoop();
+function initialisation() {
+    return __awaiter(this, void 0, void 0, function* () {
+        // Loader.add({pixi:{urls:["img/otus.json","img/alph.json","img/gawk.json","img/ggawk.json"]}});
+        // Loader.add({img:{url:"img/tiles.jpg",name:"tile",par:{x:0,y:0,w:70,h:40,col:3,row:3}}});
+        // Loader.add({img:{url:"img/tiles.jpg",name:"rock",par:{x:300,y:0,w:70,h:40,col:3,row:3}}});
+        initCanvas(canv);
+        PixiRenderer.init();
+        new ImgComplex({ src: "img/otus2.png", name: 'otus', param: { x: 0, y: 7 * 97, col: 10, row: 1, w: 112, h: 97 } });
+        new ImgComplex({ src: "img/alphonse.png", name: 'alph', param: { x: 35, y: 35 + 2 * 110, col: 8, row: 1, w: 115, h: 110 } });
+        // new ImgComplex({src:"img/gawk.json"});
+        // new ImgComplex({src:"img/ggawk.json"});
+        new ImgComplex({ src: "img/tiles.jpg", name: "tile", param: { x: 0, y: 0, w: 66, h: 66, col: 4, row: 4 } });
+        new ImgComplex({ src: "img/tiles.jpg", name: "rock", param: { x: 66 * 4, y: 0, w: 66, h: 66, col: 4, row: 4 } });
+        yield Loader.load(initSecPart, { ctx: mainctx, x: 100, y: 100, r: 40 });
+        initSecPart();
+        function initSecPart() {
+            initGame();
+            console.log('gStart ending.. starting Main Loop.');
+            mainLoop();
+        }
+    });
 }
 function mainLoop() {
     allMove(); //комментарий для теста на гитхабе
@@ -71,25 +96,25 @@ function allAction() {
 function allDraw() {
     DRAW.drawField(mainctx);
 }
-//It waits and draws loading screen
-function loadingWaiter(callBack, waiter) {
-    let ang = 0, lx = canv.width / 2, ly = canv.height / 2;
-    mainctx.strokeStyle = '#449933';
-    mainctx.lineWidth = 5;
-    loading();
-    function loading() {
-        // console.log('loading in progress... time '+(now()-begTime));
-        if (waiter.complete)
-            callBack();
-        else {
-            mainctx.beginPath();
-            mainctx.clearRect(lx - 50, ly - 50, 100, 100);
-            mainctx.arc(lx, ly, 40, ang / 2, ang, ang > 12.56);
-            mainctx.stroke();
-            ang = (waiter.loaded / (waiter.all || 1)) * 25.12 * 1 % 25.12; //(ang+.1)%25.12;
-            setTimeout(loading, 5);
-        }
-    }
-}
+// //It waits and draws loading screen
+// function loadingWaiter(callBack:Function, waiter:{complete:boolean, loaded:number, all:number}){
+//     let ang=0, lx=canv.width/2, ly=canv.height/2;
+//     mainctx.strokeStyle='#449933';
+//     mainctx.lineWidth = 5;
+//     loading();
+//     function loading(){
+//         // console.log('loading in progress... time '+(now()-begTime));
+//         if(waiter.complete)
+//         callBack();
+//         else {
+//             mainctx.beginPath();
+//             mainctx.clearRect(lx-50,ly-50,100,100);
+//             mainctx.arc(lx,ly,40,ang/2,ang, ang>12.56);
+//             mainctx.stroke();
+//             ang = (waiter.loaded/(waiter.all||1))*25.12*1%25.12;//(ang+.1)%25.12;
+//             setTimeout(loading,5);
+//         }
+//     }
+// }
 export { mainField, player, initCanvas };
 //# sourceMappingURL=main.js.map
